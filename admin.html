@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="我的工具">
+<meta name="theme-color" content="#1a1a1a">
+<title>我的工具</title>
+<style>
+:root {
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #242424;
+  --color-bg-tertiary: #2a2a2a;
+  --color-bg-card: #2f2f2f;
+  --color-border: #3a3a3a;
+  --color-border-light: #444444;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b0b0b0;
+  --color-text-tertiary: #808080;
+  --color-active: #69F0AE;
+  
+  --spacing-lg: 12px;
+  --spacing-md: 10px;
+  --spacing-sm: 6px;
+  --spacing-xs: 4px;
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-base: 15px;
+  --font-size-md: 17px;
+  --font-size-lg: 19px;
+  --radius-lg: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.header-left {
+  color: var(--color-active);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 40px;
+  user-select: none;
+}
+
+.header-center {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  user-select: none;
+}
+
+.header-right {
+  color: var(--color-active);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  min-width: 40px;
+  text-align: right;
+  user-select: none;
+}
+
+.search-container {
+  padding: var(--spacing-lg);
+  background: var(--color-bg-secondary);
+  flex-shrink: 0;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-sm);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.search-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.sections-container {
+  padding: 10px 12px;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+}
+
+.sections-container::-webkit-scrollbar {
+  display: none;
+}
+
+.sections {
+  display: flex;
+  gap: 6px;
+  min-width: min-content;
+}
+
+.section-tab {
+  padding: 6px 12px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s;
+  user-select: none;
+}
+
+.section-tab:hover {
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+}
+
+.section-tab.active {
+  background: var(--color-bg-card);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.section-tab.add-new {
+  color: var(--color-active);
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-lg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(60px + var(--spacing-lg));
+}
+
+.tool-card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  min-height: 80px;
+  border: 1px solid var(--color-border);
+  user-select: none;
+}
+
+.tool-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.tool-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tool-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.tool-description {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-arrow {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px var(--spacing-lg);
+  color: var(--color-text-tertiary);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #2a2a2a;
+  color: #69F0AE;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.add-btn:hover {
+  background: #2f2f2f;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  border: 1px solid var(--color-border);
+}
+
+.modal-title {
+  color: var(--color-text-primary);
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.modal-form-group {
+  margin-bottom: 12px;
+}
+
+.modal-label {
+  display: block;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 13px;
+}
+
+.modal-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.modal-btn.confirm {
+  background: var(--color-active);
+  color: #000;
+}
+
+.modal-btn.cancel {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+}
+
+.frame-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 2000;
+  flex-direction: column;
+  background: #000;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+
+.frame-container.show {
+  display: flex;
+}
+
+.frame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.frame-title {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+}
+
+.frame-close-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#appFrame {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">♡</div>
+  <div class="header-center">我的工具</div>
+  <div class="header-right" onclick="toggleMenu()">☰</div>
+</div>
+
+<div class="search-container">
+  <div class="search-box">
+    <div>🔍</div>
+    <input type="text" class="search-input" placeholder="搜尋工具" id="searchInput">
+  </div>
+</div>
+
+<div class="sections-container">
+  <div class="sections" id="sectionsContainer"></div>
+</div>
+
+<div class="content" id="contentArea"></div>
+
+<!-- 新增標籤 -->
+<div class="modal-overlay" id="addSectionModal">
+  <div class="modal">
+    <div class="modal-title">新增標籤</div>
+    <div class="modal-form-group">
+      <label class="modal-label">標籤名稱</label>
+      <input type="text" class="modal-input" id="sectionName" placeholder="例如：常用、工作">
+    </div>
+    <div class="modal-buttons">
+      <button class="modal-btn confirm" onclick="confirmAddSection()">確認</button>
+      <button class="modal-btn cancel" onclick="closeAddSectionModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新增連結 -->
+<div class="modal-overlay" id="addLinkModal">
+  <div class="modal">
+    <div class="modal-title">新增連結</div>
+    <div class="modal-form-group">
+      <label class="modal-label">名稱</label>
+      <input type="text" class="modal-input" id="linkTitle" placeholder="工具名稱">
+    </div>
+    <div class="modal-form-group">
+      <label class="modal-label">描述</label>
+      <input type="text" class="modal-input" id="linkDesc" placeholder="簡短說明">
+    </div>
+    <div class="modal-form-group">
+      <label class="modal-label">網址</label>
+      <input type="text" class="modal-input" id="linkUrl" placeholder="https://">
+    </div>
+    <div class="modal-form-group">
+      <label class="modal-label">圖示(Emoji)</label>
+      <input type="text" class="modal-input" id="linkIcon" placeholder="🧩" maxlength="2">
+    </div>
+    <div class="modal-buttons">
+      <button class="modal-btn confirm" onclick="confirmAddLink()">確認</button>
+      <button class="modal-btn cancel" onclick="closeAddLinkModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- iframe -->
+<div class="frame-container" id="frameContainer">
+  <div class="frame-header">
+    <div style="width:36px"></div>
+    <div class="frame-title" id="frameTitle"></div>
+    <button class="frame-close-btn" onclick="closeFrame()">✕</button>
+  </div>
+  <iframe id="appFrame"></iframe>
+</div>
+
+<!-- 選單 -->
+<div class="modal-overlay" id="menuModal" style="align-items: flex-end;">
+  <div class="modal" style="border-bottom-left-radius:0; border-bottom-right-radius:0; width:100%; max-width:100%;">
+    <div class="modal-title">選單</div>
+    <div style="margin-top:15px;">
+      <div class="menu-item" onclick="exportConfig(); closeMenu();" style="padding:12px; background:#2a2a2a; border-radius:8px; margin-bottom:8px;">匯出設定</div>
+      <div class="menu-item" onclick="importConfig(); closeMenu();" style="padding:12px; background:#2a2a2a; border-radius:8px; margin-bottom:8px;">匯入設定</div>
+      <div class="menu-item" onclick="resetAll(); closeMenu();" style="padding:12px; background:#2a2a2a; border-radius:8px; color:#ff6b6b;">重置全部</div>
+    </div>
+    <div class="modal-buttons" style="margin-top:15px;">
+      <button class="modal-btn confirm" onclick="closeMenu()" style="background:#2a2a2a; color:#fff;">關閉</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==============================================
+// 1. 配置區（你要改東西只改這裡）
+// ==============================================
+const CONFIG = {
+  STORAGE_KEY: "my_toolbox_data",
+  EMPTY_SECTIONS: {} // 完全空白
+};
+
+// ==============================================
+// 2. 全局狀態
+// ==============================================
+let sections = {};
+let currentSection = null;
+
+// ==============================================
+// 3. 初始化
+// ==============================================
+function init() {
+  loadData();
+  renderAll();
+}
+
+// ==============================================
+// 4. 資料讀寫核心（拆出來的新增邏輯底層）
+// ==============================================
+function loadData() {
+  const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+  if (saved) {
+    try { sections = JSON.parse(saved); }
+    catch (e) { sections = CONFIG.EMPTY_SECTIONS; }
+  } else {
+    sections = CONFIG.EMPTY_SECTIONS;
+  }
+  if (Object.keys(sections).length === 0) {
+    sections.section_default = { name: "我的工具", icon: "📦", links: [] };
+  }
+  currentSection = Object.keys(sections)[0];
+}
+
+function saveData() {
+  localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(sections));
+}
+
+// ==============================================
+// 5. 畫面渲染
+// ==============================================
+function renderAll() {
+  renderSections();
+  renderContent();
+}
+
+function renderSections() {
+  const el = document.getElementById("sectionsContainer");
+  el.innerHTML = "";
+  Object.entries(sections).forEach(([id, sec]) => {
+    const tab = document.createElement("div");
+    tab.className = "section-tab " + (id === currentSection ? "active" : "");
+    tab.textContent = sec.name;
+    tab.onclick = () => { currentSection = id; renderAll(); };
+    el.appendChild(tab);
+  });
+  const add = document.createElement("div");
+  add.className = "section-tab add-new";
+  add.textContent = "➕";
+  add.onclick = openAddSectionModal;
+  el.appendChild(add);
+}
+
+function renderContent() {
+  const el = document.getElementById("contentArea");
+  el.innerHTML = "";
+  const sec = sections[currentSection];
+
+  const head = document.createElement("div");
+  head.style.cssText = "display:flex;align-items:center;gap:10px;margin-bottom:15px;padding:10px;background:#2a2a2a;border-radius:10px";
+  head.innerHTML = `
+    <div style="font-size:24px;">${sec.icon}</div>
+    <div>
+      <div style="color:#fff;font-weight:60px;">${sec.name}</div>
+      <div style="color:#808080;font-size:12px;">${sec.links.length} 個工具</div>
+    </div>
+  `;
+  el.appendChild(head);
+
+  if (sec.links.length === 0) {
+    el.innerHTML += `
+      <div class="empty-state">
+        <div class="empty-state-icon">🔗</div>
+        <div>暫無工具</div>
+      </div>
+    `;
+  } else {
+    sec.links.forEach((link, i) => {
+      const card = document.createElement("div");
+      card.className = "tool-card";
+      card.innerHTML = `
+        <div class="tool-icon">${link.icon}</div>
+        <div class="tool-content">
+          <div class="tool-title">${link.title}</div>
+          <div class="tool-description">${link.desc}</div>
+        </div>
+        <div class="tool-arrow">›</div>
+      `;
+      card.onclick = () => openFrame(link.url, link.title);
+      card.oncontextmenu = (e) => {
+        e.preventDefault();
+        if (confirm("確定刪除？")) {
+          sec.links.splice(i, 1);
+          saveData();
+          renderAll();
+        }
+      };
+      el.appendChild(card);
+    });
+  }
+
+  const btn = document.createElement("button");
+  btn.className = "add-btn";
+  btn.textContent = "➕ 新增工具";
+  btn.onclick = openAddLinkModal;
+  el.appendChild(btn);
+}
+
+// ==============================================
+// 6. 新增邏輯框架（完全獨立模組）
+// ==============================================
+function openAddSectionModal() { document.getElementById("addSectionModal").classList.add("active"); }
+function closeAddSectionModal() {
+  document.getElementById("addSectionModal").classList.remove("active");
+  document.getElementById("sectionName").value = "";
+}
+function confirmAddSection() {
+  const name = document.getElementById("sectionName").value.trim();
+  if (!name) return alert("請輸入名稱");
+  const id = "sec_" + Date.now();
+  sections[id] = { name, icon: "📌", links: [] };
+  saveData();
+  currentSection = id;
+  closeAddSectionModal();
+  renderAll();
+}
+
+function openAddLinkModal() { document.getElementById("addLinkModal").classList.add("active"); }
+function closeAddLinkModal() {
+  document.getElementById("addLinkModal").classList.remove("active");
+  document.querySelectorAll("#addLinkModal input").forEach(i => i.value = "");
+}
+function confirmAddLink() {
+  const title = document.getElementById("linkTitle").value.trim();
+  const desc  = document.getElementById("linkDesc").value.trim();
+  const url   = document.getElementById("linkUrl").value.trim();
+  const icon  = document.getElementById("linkIcon").value.trim() || "🔗";
+  if (!title || !url) return alert("請填名稱與網址");
+  sections[currentSection].links.push({ title, desc, url, icon });
+  saveData();
+  closeAddLinkModal();
+  renderAll();
+}
+
+// ==============================================
+// 7. iframe 開啟
+// ==============================================
+function openFrame(url, title) {
+  document.getElementById("frameContainer").classList.add("show");
+  document.getElementById("frameTitle").textContent = title;
+  document.getElementById("appFrame").src = url;
+  document.body.style.overflow = "hidden";
+}
+function closeFrame() {
+  document.getElementById("frameContainer").classList.remove("show");
+  document.getElementById("appFrame").src = "";
+  document.body.style.overflow = "";
+}
+
+// ==============================================
+// 8. 選單 & 匯入匯出（免費後台概念）
+// ==============================================
+function toggleMenu() {
+  document.getElementById("menuModal").classList.toggle("active");
+}
+function closeMenu() {
+  document.getElementById("menuModal").classList.remove("active");
+}
+function exportConfig() {
+  const data = localStorage.getItem(CONFIG.STORAGE_KEY);
+  const blob = new Blob([data], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "toolbox_config.json";
+  a.click();
+}
+function importConfig() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const json = ev.target.result;
+        JSON.parse(json);
+        localStorage.setItem(CONFIG.STORAGE_KEY, json);
+        alert("匯入成功，將重新整理");
+        location.reload();
+      } catch {
+        alert("格式錯誤");
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+function resetAll() {
+  if (!confirm("確定重置所有資料？")) return;
+  localStorage.clear();
+  location.reload();
+}
+
+// ==============================================
+// 啟動
+// ==============================================
+window.addEventListener("DOMContentLoaded", init);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeFrame();
+});
+</script>
+</body>
+</html>

@@ -1,10 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-    <title>測試頁面</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的工具集</title>
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --card: #242424;
+      --text: #fff;
+      --sub: #888;
+      --accent: #69F0AE;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-count {
+      font-size: 14px;
+      color: var(--sub);
+      font-weight: 400;
+    }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .tool-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.2s;
+    }
+    .tool-card:hover {
+      transform: translateY(-2px);
+    }
+    .tool-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .tool-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tool-desc {
+      font-size: 12px;
+      color: var(--sub);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .empty {
+      text-align: center;
+      color: var(--sub);
+      padding: 40px 0;
+    }
+  </style>
 </head>
 <body>
-    <h1>網站運作中</h1>
-    <p>GitHub Pages 測試成功</p>
+  <h1>我的工具集</h1>
+  <div id="app"></div>
+
+  <script>
+    const STORAGE_KEY = "my_toolbox_data";
+
+    function loadData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("載入失敗", e);
+          return {};
+        }
+      }
+      return {};
+    }
+
+    function render() {
+      const data = loadData();
+      const app = document.getElementById("app");
+      app.innerHTML = "";
+
+      const sections = Object.entries(data);
+      if (sections.length === 0) {
+        app.innerHTML = '<div class="empty">暫無工具，請先到後台新增</div>';
+        return;
+      }
+
+      sections.forEach(([id, sec]) => {
+        const sectionEl = document.createElement("div");
+        sectionEl.className = "section";
+
+        const title = document.createElement("div");
+        title.className = "section-title";
+        title.innerHTML = `
+          <span>${sec.icon}</span>
+          <span>${sec.name}</span>
+          <span class="section-count">(${sec.links.length} 個)</span>
+        `;
+        sectionEl.appendChild(title);
+
+        const grid = document.createElement("div");
+        grid.className = "tool-grid";
+
+        sec.links.forEach(link => {
+          const card = document.createElement("a");
+          card.className = "tool-card";
+          card.href = link.url;
+          card.target = "_blank";
+          card.rel = "noopener noreferrer";
+          card.innerHTML = `
+            <div class="tool-icon">${link.icon}</div>
+            <div class="tool-name">${link.title}</div>
+            <div class="tool-desc">${link.desc}</div>
+          `;
+          grid.appendChild(card);
+        });
+
+        sectionEl.appendChild(grid);
+        app.appendChild(sectionEl);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", render);
+  </script>
 </body>
 </html>

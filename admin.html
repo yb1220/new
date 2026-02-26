@@ -1,691 +1,930 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="我的工具">
-<meta name="theme-color" content="#1a1a1a">
-<title>我的工具</title>
-<style>
-:root {
-  --color-bg-primary: #1a1a1a;
-  --color-bg-secondary: #242424;
-  --color-bg-tertiary: #2a2a2a;
-  --color-bg-card: #2f2f2f;
-  --color-border: #3a3a3a;
-  --color-border-light: #444444;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #b0b0b0;
-  --color-text-tertiary: #808080;
-  --color-active: #69F0AE;
-  
-  --spacing-lg: 12px;
-  --spacing-md: 10px;
-  --spacing-sm: 6px;
-  --spacing-xs: 4px;
-  --font-size-xs: 11px;
-  --font-size-sm: 13px;
-  --font-size-base: 15px;
-  --font-size-md: 17px;
-  --font-size-lg: 19px;
-  --radius-lg: 14px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="我的工具">
+  <title>我的工具 - 管理</title>
+  <style>
+    :root {
+      --color-bg-primary: #1a1a1a;
+      --color-bg-secondary: #242424;
+      --color-bg-tertiary: #2a2a2a;
+      --color-bg-card: #2f2f2f;
+      --color-border: #3a3a3a;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #b0b0b0;
+      --color-text-tertiary: #808080;
+      --color-active: #69F0AE;
+      --color-danger: #ff6b6b;
+      --spacing-lg: 12px;
+      --spacing-md: 10px;
+      --spacing-sm: 6px;
+      --font-size-xs: 11px;
+      --font-size-sm: 13px;
+      --font-size-base: 15px;
+      --font-size-md: 17px;
+      --font-size-lg: 19px;
+      --radius-lg: 14px;
+    }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  background: var(--color-bg-primary);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior: none;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
-}
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--color-bg-primary);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-base);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-lg);
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  flex-shrink: 0;
-}
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-lg);
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
 
-.header-left {
-  color: var(--color-active);
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  cursor: pointer;
-  min-width: 40px;
-  user-select: none;
-}
+    .header-left {
+      color: var(--color-active);
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
 
-.header-center {
-  color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  user-select: none;
-}
+    .header-center {
+      color: var(--color-text-primary);
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
 
-.header-right {
-  color: var(--color-active);
-  font-size: var(--font-size-lg);
-  cursor: pointer;
-  min-width: 40px;
-  text-align: right;
-  user-select: none;
-}
+    .header-right {
+      color: var(--color-active);
+      font-size: var(--font-size-lg);
+      cursor: pointer;
+      user-select: none;
+    }
 
-.search-container {
-  padding: var(--spacing-lg);
-  background: var(--color-bg-secondary);
-  flex-shrink: 0;
-}
+    .sections-tabs {
+      display: flex;
+      gap: 8px;
+      padding: var(--spacing-lg);
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 0;
+    }
 
-.search-box {
-  display: flex;
-  align-items: center;
-  background: var(--color-bg-tertiary);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md) var(--spacing-lg);
-  gap: var(--spacing-sm);
-}
+    .sections-tabs::-webkit-scrollbar {
+      display: none;
+    }
 
-.search-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-base);
-}
+    .tab {
+      padding: 8px 16px;
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
 
-.search-input::placeholder {
-  color: var(--color-text-tertiary);
-}
+    .tab:hover {
+      background: var(--color-bg-card);
+    }
 
-.sections-container {
-  padding: 10px 12px;
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  flex-shrink: 0;
-}
+    .tab.active {
+      background: var(--color-active);
+      color: #000;
+      border-color: var(--color-active);
+      font-weight: 600;
+    }
 
-.sections-container::-webkit-scrollbar {
-  display: none;
-}
+    .tab.add {
+      color: var(--color-active);
+    }
 
-.sections {
-  display: flex;
-  gap: 6px;
-  min-width: min-content;
-}
+    .content {
+      flex: 1;
+      padding: var(--spacing-lg);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
 
-.section-tab {
-  padding: 6px 12px;
-  background: var(--color-bg-tertiary);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  color: var(--color-text-secondary);
-  font-size: 13px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.3s;
-  user-select: none;
-}
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: var(--color-bg-secondary);
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+    }
 
-.section-tab:hover {
-  background: var(--color-bg-card);
-  color: var(--color-text-primary);
-}
+    .section-info {
+      flex: 1;
+    }
 
-.section-tab.active {
-  background: var(--color-bg-card);
-  border-color: var(--color-border);
-  color: var(--color-text-primary);
-  font-weight: 600;
-}
+    .section-icon-large {
+      font-size: 32px;
+      cursor: pointer;
+      user-select: none;
+    }
 
-.section-tab.add-new {
-  color: var(--color-active);
-}
+    .section-name {
+      color: var(--color-text-primary);
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-.content {
-  flex: 1;
-  padding: var(--spacing-md) var(--spacing-lg);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(60px + var(--spacing-lg));
-}
+    .section-meta {
+      color: var(--color-text-tertiary);
+      font-size: 12px;
+    }
 
-.tool-card {
-  background: var(--color-bg-secondary);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  min-height: 80px;
-  border: 1px solid var(--color-border);
-  user-select: none;
-}
+    .section-actions {
+      display: flex;
+      gap: 8px;
+    }
 
-.tool-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  flex-shrink: 0;
-}
+    .btn-sm {
+      padding: 8px 12px;
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
 
-.tool-content {
-  flex: 1;
-  min-width: 0;
-}
+    .btn-sm:hover {
+      background: var(--color-bg-card);
+      color: var(--color-text-primary);
+    }
 
-.tool-title {
-  color: var(--color-text-primary);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  margin-bottom: 4px;
-}
+    .btn-sm.danger {
+      color: var(--color-danger);
+      border-color: rgba(255, 107, 107, 0.3);
+    }
 
-.tool-description {
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-xs);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-.tool-arrow {
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-lg);
-  flex-shrink: 0;
-}
+    .link-item {
+      background: var(--color-bg-secondary);
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
 
-.empty-state {
-  text-align: center;
-  padding: 60px var(--spacing-lg);
-  color: var(--color-text-tertiary);
-}
+    .link-item:active {
+      background: var(--color-bg-tertiary);
+    }
 
-.empty-state-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
+    .link-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
 
-.add-btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background: #2a2a2a;
-  color: #69F0AE;
-  border: 1px solid #3a3a3a;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s;
-}
+    .link-info {
+      flex: 1;
+      min-width: 0;
+    }
 
-.add-btn:hover {
-  background: #2f2f2f;
-}
+    .link-title {
+      color: var(--color-text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  justify-content: center;
-  align-items: center;
-}
+    .link-desc {
+      color: var(--color-text-tertiary);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-.modal-overlay.active {
-  display: flex;
-}
+    .link-url {
+      color: var(--color-text-tertiary);
+      font-size: 11px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-.modal {
-  background: var(--color-bg-secondary);
-  border-radius: 12px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  border: 1px solid var(--color-border);
-}
+    .link-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
 
-.modal-title {
-  color: var(--color-text-primary);
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
 
-.modal-form-group {
-  margin-bottom: 12px;
-}
+    .btn-icon:hover {
+      background: var(--color-bg-card);
+    }
 
-.modal-label {
-  display: block;
-  color: var(--color-text-secondary);
-  font-size: 13px;
-  margin-bottom: 6px;
-}
+    .btn-icon.danger {
+      color: var(--color-danger);
+      border-color: rgba(255, 107, 107, 0.3);
+    }
 
-.modal-input {
-  width: 100%;
-  padding: 10px;
-  background: var(--color-bg-tertiary);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  color: var(--color-text-primary);
-  font-size: 13px;
-}
+    .add-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--color-active);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.2s;
+    }
 
-.modal-input::placeholder {
-  color: var(--color-text-tertiary);
-}
+    .add-btn:hover {
+      opacity: 0.9;
+    }
 
-.modal-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--color-text-tertiary);
+    }
 
-.modal-btn {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 13px;
-  transition: all 0.2s;
-}
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
 
-.modal-btn.confirm {
-  background: var(--color-active);
-  color: #000;
-}
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
 
-.modal-btn.cancel {
-  background: var(--color-bg-tertiary);
-  color: var(--color-text-primary);
-}
+    .modal-backdrop.active {
+      display: flex;
+    }
 
-.frame-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  z-index: 2000;
-  flex-direction: column;
-  background: #000;
-  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-}
+    .modal {
+      background: var(--color-bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--color-border);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
 
-.frame-container.show {
-  display: flex;
-}
+    .modal-title {
+      color: var(--color-text-primary);
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
 
-.frame-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  margin-bottom: 8px;
-  flex-shrink: 0;
-}
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-.frame-title {
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  flex: 1;
-  text-align: center;
-}
+    .form-label {
+      display: block;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
 
-.frame-close-btn {
-  width: 36px;
-  height: 36px;
-  background: rgba(255,255,255,0.2);
-  border: none;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      color: var(--color-text-primary);
+      font-size: 13px;
+    }
 
-#appFrame {
-  flex: 1;
-  border: none;
-  border-radius: 12px;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-</style>
+    .form-input::placeholder {
+      color: var(--color-text-tertiary);
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .form-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .form-btn.confirm {
+      background: var(--color-active);
+      color: #000;
+    }
+
+    .form-btn.cancel {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+    }
+
+    .menu-modal {
+      width: 100%;
+      max-width: none;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .menu-item {
+      padding: 12px;
+      background: var(--color-bg-tertiary);
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.2s;
+      border: 1px solid var(--color-border);
+    }
+
+    .menu-item:hover {
+      background: var(--color-bg-card);
+    }
+
+    .menu-item.danger {
+      color: var(--color-danger);
+      border-color: rgba(255, 107, 107, 0.3);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--color-active);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-left">♡</div>
-  <div class="header-center">我的工具</div>
-  <div class="header-right" onclick="toggleMenu()">☰</div>
+  <div class="header-left" onclick="goHome()">← 返回</div>
+  <div class="header-center">我的工具 - 管理</div>
+  <div class="header-right" onclick="showMenu()">⋮</div>
 </div>
 
-<div class="search-container">
-  <div class="search-box">
-    <div>🔍</div>
-    <input type="text" class="search-input" placeholder="搜尋工具" id="searchInput">
-  </div>
-</div>
-
-<div class="sections-container">
-  <div class="sections" id="sectionsContainer"></div>
-</div>
+<div class="sections-tabs" id="sectionsTabsContainer"></div>
 
 <div class="content" id="contentArea"></div>
 
-<!-- 新增標籤 -->
-<div class="modal-overlay" id="addSectionModal">
+<!-- 編輯分類 Modal -->
+<div class="modal-backdrop" id="editSectionModal">
   <div class="modal">
-    <div class="modal-title">新增標籤</div>
-    <div class="modal-form-group">
-      <label class="modal-label">標籤名稱</label>
-      <input type="text" class="modal-input" id="sectionName" placeholder="例如：常用、工作">
+    <div class="modal-title">編輯分類</div>
+    <div class="form-group">
+      <div class="form-label">分類名稱</div>
+      <input type="text" class="form-input" id="editSectionName" placeholder="例如：常用">
     </div>
-    <div class="modal-buttons">
-      <button class="modal-btn confirm" onclick="confirmAddSection()">確認</button>
-      <button class="modal-btn cancel" onclick="closeAddSectionModal()">取消</button>
+    <div class="form-group">
+      <div class="form-label">分類 Icon (點擊編輯)</div>
+      <div style="font-size: 32px; cursor: pointer; padding: 12px; background: var(--color-bg-tertiary); border-radius: 6px; text-align: center;" id="editSectionIconDisplay" onclick="selectEmoji('edit')">📌</div>
+    </div>
+    <div class="form-buttons">
+      <button class="form-btn confirm" onclick="confirmEditSection()">確認</button>
+      <button class="form-btn cancel" onclick="closeEditSectionModal()">取消</button>
     </div>
   </div>
 </div>
 
-<!-- 新增連結 -->
-<div class="modal-overlay" id="addLinkModal">
+<!-- 新增工具 Modal -->
+<div class="modal-backdrop" id="addLinkModal">
   <div class="modal">
-    <div class="modal-title">新增連結</div>
-    <div class="modal-form-group">
-      <label class="modal-label">名稱</label>
-      <input type="text" class="modal-input" id="linkTitle" placeholder="工具名稱">
+    <div class="modal-title">新增工具</div>
+    <div class="form-group">
+      <div class="form-label">名稱</div>
+      <input type="text" class="form-input" id="newLinkTitle" placeholder="工具名稱">
     </div>
-    <div class="modal-form-group">
-      <label class="modal-label">描述</label>
-      <input type="text" class="modal-input" id="linkDesc" placeholder="簡短說明">
+    <div class="form-group">
+      <div class="form-label">描述</div>
+      <input type="text" class="form-input" id="newLinkDesc" placeholder="簡短說明（選填）">
     </div>
-    <div class="modal-form-group">
-      <label class="modal-label">網址</label>
-      <input type="text" class="modal-input" id="linkUrl" placeholder="https://">
+    <div class="form-group">
+      <div class="form-label">URL</div>
+      <input type="text" class="form-input" id="newLinkUrl" placeholder="https://example.com">
     </div>
-    <div class="modal-form-group">
-      <label class="modal-label">圖示(Emoji)</label>
-      <input type="text" class="modal-input" id="linkIcon" placeholder="🧩" maxlength="2">
+    <div class="form-group">
+      <div class="form-label">Icon (點擊編輯)</div>
+      <div style="font-size: 32px; cursor: pointer; padding: 12px; background: var(--color-bg-tertiary); border-radius: 6px; text-align: center;" id="newLinkIconDisplay" onclick="selectEmoji('link')">🔗</div>
     </div>
-    <div class="modal-buttons">
-      <button class="modal-btn confirm" onclick="confirmAddLink()">確認</button>
-      <button class="modal-btn cancel" onclick="closeAddLinkModal()">取消</button>
+    <div class="form-buttons">
+      <button class="form-btn confirm" onclick="confirmAddLink()">確認</button>
+      <button class="form-btn cancel" onclick="closeAddLinkModal()">取消</button>
     </div>
   </div>
 </div>
 
-<!-- iframe -->
-<div class="frame-container" id="frameContainer">
-  <div class="frame-header">
-    <div style="width:36px"></div>
-    <div class="frame-title" id="frameTitle"></div>
-    <button class="frame-close-btn" onclick="closeFrame()">✕</button>
+<!-- 編輯工具 Modal -->
+<div class="modal-backdrop" id="editLinkModal">
+  <div class="modal">
+    <div class="modal-title">編輯工具</div>
+    <div class="form-group">
+      <div class="form-label">名稱</div>
+      <input type="text" class="form-input" id="editLinkTitle">
+    </div>
+    <div class="form-group">
+      <div class="form-label">描述</div>
+      <input type="text" class="form-input" id="editLinkDesc">
+    </div>
+    <div class="form-group">
+      <div class="form-label">URL</div>
+      <input type="text" class="form-input" id="editLinkUrl">
+    </div>
+    <div class="form-group">
+      <div class="form-label">Icon (點擊編輯)</div>
+      <div style="font-size: 32px; cursor: pointer; padding: 12px; background: var(--color-bg-tertiary); border-radius: 6px; text-align: center;" id="editLinkIconDisplay" onclick="selectEmoji('editLink')">🔗</div>
+    </div>
+    <div class="form-buttons">
+      <button class="form-btn confirm" onclick="confirmEditLink()">確認</button>
+      <button class="form-btn cancel" onclick="closeEditLinkModal()">取消</button>
+    </div>
   </div>
-  <iframe id="appFrame"></iframe>
 </div>
 
-<!-- 選單 -->
-<div class="modal-overlay" id="menuModal" style="align-items: flex-end;">
-  <div class="modal" style="border-bottom-left-radius:0; border-bottom-right-radius:0; width:100%; max-width:100%;">
+<!-- Emoji 選擇器 -->
+<div class="modal-backdrop" id="emojiPickerModal">
+  <div class="modal">
+    <div class="modal-title">選擇 Emoji 或輸入</div>
+    <div class="form-group">
+      <input type="text" class="form-input" id="emojiInput" placeholder="貼上 Emoji 或輸入" maxlength="2">
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 15px;">
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🎯')">🎯</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🛠️')">🛠️</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('📱')">📱</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('💎')">💎</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🚀')">🚀</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('⚡')">⚡</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🎨')">🎨</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🔐')">🔐</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🌐')">🌐</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('📊')">📊</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🎬')">🎬</div>
+      <div style="font-size: 28px; cursor: pointer; padding: 8px; border-radius: 6px; background: var(--color-bg-tertiary); text-align: center;" onclick="selectEmojiDirect('🎵')">🎵</div>
+    </div>
+    <div class="form-buttons">
+      <button class="form-btn confirm" onclick="confirmEmoji()">確認</button>
+      <button class="form-btn cancel" onclick="closeEmojiPickerModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 選單 Modal -->
+<div class="modal-backdrop" id="menuModal" style="align-items: flex-end;">
+  <div class="modal menu-modal">
     <div class="modal-title">選單</div>
-    <div style="margin-top:15px;">
-      <div class="menu-item" onclick="exportConfig(); closeMenu();" style="padding:12px; background:#2a2a2a; border-radius:8px; margin-bottom:8px;">匯出設定</div>
-      <div class="menu-item" onclick="importConfig(); closeMenu();" style="padding:12px; background:#2a2a2a; border-radius:8px; margin-bottom:8px;">匯入設定</div>
-      <div class="menu-item" onclick="resetAll(); closeMenu();" style="padding:12px; background:#2a2a2a; border-radius:8px; color:#ff6b6b;">重置全部</div>
+    <div class="menu-items">
+      <div class="menu-item" onclick="exportData()">📥 匯出設定</div>
+      <div class="menu-item" onclick="importData()">📤 匯入設定</div>
+      <div class="menu-item danger" onclick="resetAll()">🔄 重置全部</div>
     </div>
-    <div class="modal-buttons" style="margin-top:15px;">
-      <button class="modal-btn confirm" onclick="closeMenu()" style="background:#2a2a2a; color:#fff;">關閉</button>
+    <div style="margin-top: 10px;">
+      <button class="form-btn cancel" style="width: 100%;" onclick="closeMenu()">關閉</button>
     </div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ==============================================
-// 1. 配置區（你要改東西只改這裡）
-// ==============================================
-const CONFIG = {
-  STORAGE_KEY: "my_toolbox_data",
-  EMPTY_SECTIONS: {} // 完全空白
-};
+// 🔧 改這裡：填入你的 Supabase 資訊
+const SUPABASE_URL = "https://hfsfdhtpjuguehmdyryo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K2LJSqbEgwYro9hl2tua8w_u7Q2rR2i";
+const USE_SUPABASE = true;
 
-// ==============================================
-// 2. 全局狀態
-// ==============================================
+const STORAGE_KEY = "my_toolbox_data";
+const supabase = USE_SUPABASE ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+const USER_ID = "user_" + (localStorage.getItem("user_id") || (localStorage.setItem("user_id", "user_" + Math.random().toString(36).substr(2, 9)), localStorage.getItem("user_id")));
+
 let sections = {};
 let currentSection = null;
+let currentEditingMode = null;
 
-// ==============================================
-// 3. 初始化
-// ==============================================
-function init() {
-  loadData();
-  renderAll();
+// ============ 初始化 ============
+async function init() {
+  await loadData();
+  renderTabs();
+  renderContent();
+  setupRealtimeSync();
 }
 
-// ==============================================
-// 4. 資料讀寫核心（拆出來的新增邏輯底層）
-// ==============================================
-function loadData() {
-  const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
-  if (saved) {
-    try { sections = JSON.parse(saved); }
-    catch (e) { sections = CONFIG.EMPTY_SECTIONS; }
+// ============ 資料管理 ============
+async function loadData() {
+  if (USE_SUPABASE && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("toolbox_sections")
+        .select("*")
+        .eq("user_id", USER_ID);
+      
+      if (error) throw error;
+      
+      sections = {};
+      data.forEach(row => {
+        sections[row.section_id] = {
+          name: row.name,
+          icon: row.icon,
+          links: row.links || []
+        };
+      });
+    } catch (err) {
+      console.error("Supabase 讀取失敗", err);
+      loadLocalData();
+      return;
+    }
   } else {
-    sections = CONFIG.EMPTY_SECTIONS;
+    loadLocalData();
   }
+  
   if (Object.keys(sections).length === 0) {
     sections.section_default = { name: "我的工具", icon: "📦", links: [] };
+    if (USE_SUPABASE && supabase) {
+      try {
+        await supabase.from("toolbox_sections").insert({
+          user_id: USER_ID,
+          section_id: "section_default",
+          name: "我的工具",
+          icon: "📦",
+          links: []
+        });
+      } catch (e) {
+        console.error("初始化失敗", e);
+      }
+    } else {
+      saveLocalData();
+    }
   }
   currentSection = Object.keys(sections)[0];
 }
 
-function saveData() {
-  localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(sections));
+function loadLocalData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      sections = JSON.parse(saved);
+    } catch (e) {
+      sections = {};
+    }
+  }
 }
 
-// ==============================================
-// 5. 畫面渲染
-// ==============================================
-function renderAll() {
-  renderSections();
-  renderContent();
+async function saveData() {
+  if (USE_SUPABASE && supabase) {
+    try {
+      for (const [secId, sec] of Object.entries(sections)) {
+        await supabase
+          .from("toolbox_sections")
+          .upsert({
+            user_id: USER_ID,
+            section_id: secId,
+            name: sec.name,
+            icon: sec.icon,
+            links: sec.links || []
+          });
+      }
+    } catch (err) {
+      console.error("Supabase 保存失敗", err);
+      saveLocalData();
+    }
+  } else {
+    saveLocalData();
+  }
 }
 
-function renderSections() {
-  const el = document.getElementById("sectionsContainer");
+function saveLocalData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sections));
+}
+
+// ============ 標籤頁面 ============
+function renderTabs() {
+  const el = document.getElementById("sectionsTabsContainer");
   el.innerHTML = "";
-  Object.entries(sections).forEach(([id, sec]) => {
+  Object.keys(sections).forEach(id => {
     const tab = document.createElement("div");
-    tab.className = "section-tab " + (id === currentSection ? "active" : "");
-    tab.textContent = sec.name;
-    tab.onclick = () => { currentSection = id; renderAll(); };
+    tab.className = "tab " + (id === currentSection ? "active" : "");
+    tab.textContent = `${sections[id].icon} ${sections[id].name}`;
+    tab.onclick = () => {
+      currentSection = id;
+      renderTabs();
+      renderContent();
+    };
     el.appendChild(tab);
   });
-  const add = document.createElement("div");
-  add.className = "section-tab add-new";
-  add.textContent = "➕";
-  add.onclick = openAddSectionModal;
-  el.appendChild(add);
+  const addTab = document.createElement("div");
+  addTab.className = "tab add";
+  addTab.textContent = "➕";
+  addTab.onclick = showAddSectionModal;
+  el.appendChild(addTab);
 }
 
+// ============ 內容區 ============
 function renderContent() {
   const el = document.getElementById("contentArea");
   el.innerHTML = "";
   const sec = sections[currentSection];
 
-  const head = document.createElement("div");
-  head.style.cssText = "display:flex;align-items:center;gap:10px;margin-bottom:15px;padding:10px;background:#2a2a2a;border-radius:10px";
-  head.innerHTML = `
-    <div style="font-size:24px;">${sec.icon}</div>
-    <div>
-      <div style="color:#fff;font-weight:60px;">${sec.name}</div>
-      <div style="color:#808080;font-size:12px;">${sec.links.length} 個工具</div>
+  const header = document.createElement("div");
+  header.className = "section-header";
+  header.innerHTML = `
+    <div class="section-icon-large" onclick="editSection()">${sec.icon}</div>
+    <div class="section-info">
+      <div class="section-name">${sec.name}</div>
+      <div class="section-meta">${sec.links.length} 個工具</div>
+    </div>
+    <div class="section-actions">
+      <button class="btn-sm" onclick="editSection()">編輯</button>
+      <button class="btn-sm danger" onclick="deleteSection()">刪除</button>
     </div>
   `;
-  el.appendChild(head);
+  el.appendChild(header);
 
   if (sec.links.length === 0) {
     el.innerHTML += `
       <div class="empty-state">
-        <div class="empty-state-icon">🔗</div>
-        <div>暫無工具</div>
+        <div class="empty-icon">🔗</div>
+        <div>暫無工具，點擊下方新增</div>
       </div>
     `;
   } else {
+    const list = document.createElement("div");
+    list.className = "links-list";
     sec.links.forEach((link, i) => {
-      const card = document.createElement("div");
-      card.className = "tool-card";
-      card.innerHTML = `
-        <div class="tool-icon">${link.icon}</div>
-        <div class="tool-content">
-          <div class="tool-title">${link.title}</div>
-          <div class="tool-description">${link.desc}</div>
+      const item = document.createElement("div");
+      item.className = "link-item";
+      item.innerHTML = `
+        <div class="link-icon">${link.icon}</div>
+        <div class="link-info">
+          <div class="link-title">${link.title}</div>
+          <div class="link-desc">${link.desc || "無描述"}</div>
+          <div class="link-url">${link.url}</div>
         </div>
-        <div class="tool-arrow">›</div>
+        <div class="link-actions">
+          <button class="btn-icon" onclick="editLink(${i})">✎</button>
+          <button class="btn-icon danger" onclick="deleteLink(${i})">✕</button>
+        </div>
       `;
-      card.onclick = () => openFrame(link.url, link.title);
-      card.oncontextmenu = (e) => {
-        e.preventDefault();
-        if (confirm("確定刪除？")) {
-          sec.links.splice(i, 1);
-          saveData();
-          renderAll();
-        }
-      };
-      el.appendChild(card);
+      list.appendChild(item);
     });
+    el.appendChild(list);
   }
 
-  const btn = document.createElement("button");
-  btn.className = "add-btn";
-  btn.textContent = "➕ 新增工具";
-  btn.onclick = openAddLinkModal;
-  el.appendChild(btn);
+  const addBtn = document.createElement("button");
+  addBtn.className = "add-btn";
+  addBtn.textContent = "➕ 新增工具";
+  addBtn.onclick = showAddLinkModal;
+  el.appendChild(addBtn);
 }
 
-// ==============================================
-// 6. 新增邏輯框架（完全獨立模組）
-// ==============================================
-function openAddSectionModal() { document.getElementById("addSectionModal").classList.add("active"); }
-function closeAddSectionModal() {
-  document.getElementById("addSectionModal").classList.remove("active");
-  document.getElementById("sectionName").value = "";
-}
-function confirmAddSection() {
-  const name = document.getElementById("sectionName").value.trim();
-  if (!name) return alert("請輸入名稱");
+// ============ 分類操作 ============
+function showAddSectionModal() {
+  const name = prompt("輸入分類名稱 (例如：常用)");
+  if (!name) return;
   const id = "sec_" + Date.now();
-  sections[id] = { name, icon: "📌", links: [] };
+  sections[id] = { name: name.trim(), icon: "📌", links: [] };
   saveData();
   currentSection = id;
-  closeAddSectionModal();
-  renderAll();
+  renderTabs();
+  renderContent();
 }
 
-function openAddLinkModal() { document.getElementById("addLinkModal").classList.add("active"); }
+function editSection() {
+  document.getElementById("editSectionName").value = sections[currentSection].name;
+  document.getElementById("editSectionIconDisplay").textContent = sections[currentSection].icon;
+  document.getElementById("editSectionModal").classList.add("active");
+}
+
+function closeEditSectionModal() {
+  document.getElementById("editSectionModal").classList.remove("active");
+}
+
+function confirmEditSection() {
+  const name = document.getElementById("editSectionName").value.trim();
+  if (!name) return alert("請輸入名稱");
+  sections[currentSection].name = name;
+  saveData();
+  closeEditSectionModal();
+  renderTabs();
+  renderContent();
+}
+
+function deleteSection() {
+  if (!confirm("確定刪除此分類？")) return;
+  delete sections[currentSection];
+  const keys = Object.keys(sections);
+  currentSection = keys[0] || null;
+  if (!currentSection && Object.keys(sections).length === 0) {
+    sections.section_default = { name: "我的工具", icon: "📦", links: [] };
+    currentSection = "section_default";
+  }
+  saveData();
+  renderTabs();
+  renderContent();
+}
+
+// ============ 工具操作 ============
+function showAddLinkModal() {
+  document.getElementById("addLinkModal").classList.add("active");
+}
+
 function closeAddLinkModal() {
   document.getElementById("addLinkModal").classList.remove("active");
-  document.querySelectorAll("#addLinkModal input").forEach(i => i.value = "");
+  document.getElementById("newLinkTitle").value = "";
+  document.getElementById("newLinkDesc").value = "";
+  document.getElementById("newLinkUrl").value = "";
+  document.getElementById("newLinkIconDisplay").textContent = "🔗";
 }
+
 function confirmAddLink() {
-  const title = document.getElementById("linkTitle").value.trim();
-  const desc  = document.getElementById("linkDesc").value.trim();
-  const url   = document.getElementById("linkUrl").value.trim();
-  const icon  = document.getElementById("linkIcon").value.trim() || "🔗";
-  if (!title || !url) return alert("請填名稱與網址");
+  const title = document.getElementById("newLinkTitle").value.trim();
+  const desc = document.getElementById("newLinkDesc").value.trim();
+  const url = document.getElementById("newLinkUrl").value.trim();
+  const icon = document.getElementById("newLinkIconDisplay").textContent;
+  if (!title || !url) return alert("請填名稱和 URL");
   sections[currentSection].links.push({ title, desc, url, icon });
   saveData();
   closeAddLinkModal();
-  renderAll();
+  renderContent();
 }
 
-// ==============================================
-// 7. iframe 開啟
-// ==============================================
-function openFrame(url, title) {
-  document.getElementById("frameContainer").classList.add("show");
-  document.getElementById("frameTitle").textContent = title;
-  document.getElementById("appFrame").src = url;
-  document.body.style.overflow = "hidden";
-}
-function closeFrame() {
-  document.getElementById("frameContainer").classList.remove("show");
-  document.getElementById("appFrame").src = "";
-  document.body.style.overflow = "";
+let editingLinkIndex = null;
+
+function editLink(i) {
+  editingLinkIndex = i;
+  const link = sections[currentSection].links[i];
+  document.getElementById("editLinkTitle").value = link.title;
+  document.getElementById("editLinkDesc").value = link.desc;
+  document.getElementById("editLinkUrl").value = link.url;
+  document.getElementById("editLinkIconDisplay").textContent = link.icon;
+  document.getElementById("editLinkModal").classList.add("active");
 }
 
-// ==============================================
-// 8. 選單 & 匯入匯出（免費後台概念）
-// ==============================================
-function toggleMenu() {
-  document.getElementById("menuModal").classList.toggle("active");
+function closeEditLinkModal() {
+  document.getElementById("editLinkModal").classList.remove("active");
+  editingLinkIndex = null;
 }
+
+function confirmEditLink() {
+  const title = document.getElementById("editLinkTitle").value.trim();
+  const desc = document.getElementById("editLinkDesc").value.trim();
+  const url = document.getElementById("editLinkUrl").value.trim();
+  const icon = document.getElementById("editLinkIconDisplay").textContent;
+  if (!title || !url) return alert("請填名稱和 URL");
+  sections[currentSection].links[editingLinkIndex] = { title, desc, url, icon };
+  saveData();
+  closeEditLinkModal();
+  renderContent();
+}
+
+function deleteLink(i) {
+  if (!confirm("確定刪除？")) return;
+  sections[currentSection].links.splice(i, 1);
+  saveData();
+  renderContent();
+}
+
+// ============ Emoji 選擇器 ============
+let emojiMode = null;
+
+function selectEmoji(mode) {
+  emojiMode = mode;
+  document.getElementById("emojiInput").value = "";
+  document.getElementById("emojiPickerModal").classList.add("active");
+}
+
+function selectEmojiDirect(emoji) {
+  const input = document.getElementById("emojiInput");
+  input.value = emoji;
+  input.focus();
+}
+
+function confirmEmoji() {
+  const emoji = document.getElementById("emojiInput").value.trim();
+  if (!emoji) return alert("請輸入 Emoji");
+  
+  if (emojiMode === "edit") {
+    document.getElementById("editSectionIconDisplay").textContent = emoji;
+  } else if (emojiMode === "link") {
+    document.getElementById("newLinkIconDisplay").textContent = emoji;
+  } else if (emojiMode === "editLink") {
+    document.getElementById("editLinkIconDisplay").textContent = emoji;
+  }
+  closeEmojiPickerModal();
+}
+
+function closeEmojiPickerModal() {
+  document.getElementById("emojiPickerModal").classList.remove("active");
+  emojiMode = null;
+}
+
+// ============ 選單 ============
+function showMenu() {
+  document.getElementById("menuModal").classList.add("active");
+}
+
 function closeMenu() {
   document.getElementById("menuModal").classList.remove("active");
 }
-function exportConfig() {
-  const data = localStorage.getItem(CONFIG.STORAGE_KEY);
+
+function exportData() {
+  const data = JSON.stringify(sections, null, 2);
   const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "toolbox_config.json";
+  a.href = url;
+  a.download = `toolbox_${Date.now()}.json`;
   a.click();
+  closeMenu();
 }
-function importConfig() {
+
+function importData() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".json";
@@ -695,32 +934,55 @@ function importConfig() {
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const json = ev.target.result;
-        JSON.parse(json);
-        localStorage.setItem(CONFIG.STORAGE_KEY, json);
-        alert("匯入成功，將重新整理");
-        location.reload();
-      } catch {
-        alert("格式錯誤");
+        const json = JSON.parse(ev.target.result);
+        sections = json;
+        saveData();
+        currentSection = Object.keys(sections)[0];
+        renderTabs();
+        renderContent();
+        alert("匯入成功");
+      } catch (err) {
+        alert("檔案格式錯誤: " + err.message);
       }
     };
     reader.readAsText(file);
   };
   input.click();
+  closeMenu();
 }
+
 function resetAll() {
-  if (!confirm("確定重置所有資料？")) return;
+  if (!confirm("確定要重置所有資料？此操作無法復原")) return;
   localStorage.clear();
   location.reload();
 }
 
-// ==============================================
-// 啟動
-// ==============================================
+function goHome() {
+  window.location.href = "index.html";
+}
+
+function setupRealtimeSync() {
+  if (!USE_SUPABASE || !supabase) return;
+  
+  supabase
+    .channel("toolbox_changes")
+    .on("postgres_changes", {
+      event: "*",
+      schema: "public",
+      table: "toolbox_sections",
+      filter: `user_id=eq.${USER_ID}`
+    }, (payload) => {
+      console.log("收到更新", payload);
+      loadData().then(() => {
+        renderTabs();
+        renderContent();
+      });
+    })
+    .subscribe();
+}
+
+// ============ 啟動 ============
 window.addEventListener("DOMContentLoaded", init);
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeFrame();
-});
 </script>
 </body>
 </html>

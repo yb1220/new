@@ -2,158 +2,463 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的工具集</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="我的工具">
+  <title>我的工具</title>
   <style>
     :root {
-      --bg: #1a1a1a;
-      --card: #242424;
-      --text: #fff;
-      --sub: #888;
-      --accent: #69F0AE;
+      --color-bg-primary: #1a1a1a;
+      --color-bg-secondary: #242424;
+      --color-bg-tertiary: #2a2a2a;
+      --color-bg-card: #2f2f2f;
+      --color-border: #3a3a3a;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #b0b0b0;
+      --color-text-tertiary: #808080;
+      --color-active: #69F0AE;
+      --spacing-lg: 12px;
+      --spacing-md: 10px;
+      --spacing-sm: 6px;
+      --font-size-xs: 11px;
+      --font-size-sm: 13px;
+      --font-size-base: 15px;
+      --font-size-md: 17px;
+      --font-size-lg: 19px;
+      --radius-lg: 14px;
     }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      padding: 20px;
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--color-bg-primary);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-base);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
       min-height: 100vh;
+      min-height: 100dvh;
     }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: var(--accent);
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-lg);
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
     }
-    .section {
-      margin-bottom: 30px;
-    }
-    .section-title {
-      font-size: 18px;
+
+    .header-center {
+      color: var(--color-text-primary);
+      font-size: var(--font-size-lg);
       font-weight: 600;
-      margin-bottom: 12px;
+      user-select: none;
+      flex: 1;
+      text-align: center;
+    }
+
+    .sections-container {
+      padding: 10px 12px;
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 0;
+    }
+
+    .sections-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sections {
+      display: flex;
+      gap: 6px;
+      min-width: min-content;
+    }
+
+    .section-tab {
+      padding: 6px 12px;
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s;
+      user-select: none;
+    }
+
+    .section-tab.active {
+      background: var(--color-bg-card);
+      border-color: var(--color-active);
+      color: var(--color-active);
+      font-weight: 600;
+    }
+
+    .content {
+      flex: 1;
+      padding: var(--spacing-lg);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .section-group {
+      margin-bottom: 24px;
+    }
+
+    .section-header {
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-bottom: 12px;
+      padding: 0 4px;
     }
+
+    .section-icon {
+      font-size: 20px;
+    }
+
+    .section-name {
+      color: var(--color-text-primary);
+      font-size: var(--font-size-md);
+      font-weight: 600;
+    }
+
     .section-count {
-      font-size: 14px;
-      color: var(--sub);
-      font-weight: 400;
+      color: var(--color-text-tertiary);
+      font-size: var(--font-size-xs);
+      margin-left: auto;
     }
+
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
     }
+
     .tool-card {
-      background: var(--card);
+      background: var(--color-bg-secondary);
       border-radius: 12px;
-      padding: 16px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid var(--color-border);
       text-decoration: none;
-      color: var(--text);
-      transition: transform 0.2s;
+      color: inherit;
+      min-height: 100px;
+      justify-content: center;
     }
-    .tool-card:hover {
-      transform: translateY(-2px);
+
+    .tool-card:active {
+      transform: scale(0.95);
+      background: var(--color-bg-tertiary);
     }
+
     .tool-icon {
       font-size: 32px;
-      margin-bottom: 8px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--color-bg-tertiary);
     }
-    .tool-name {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .tool-desc {
+
+    .tool-title {
+      color: var(--color-text-primary);
       font-size: 12px;
-      color: var(--sub);
+      font-weight: 500;
+      text-align: center;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
     }
-    .empty {
+
+    .empty-state {
       text-align: center;
-      color: var(--sub);
-      padding: 40px 0;
+      padding: 60px 20px;
+      color: var(--color-text-tertiary);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+    }
+
+    .icon-btn {
+      background: transparent;
+      color: var(--color-active);
+      font-size: var(--font-size-lg);
+      padding: 8px;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:active {
+      opacity: 0.7;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--color-text-tertiary);
     }
   </style>
 </head>
 <body>
-  <h1>我的工具集</h1>
-  <div id="app"></div>
 
-  <script>
-    const STORAGE_KEY = "my_toolbox_data";
+<div class="header">
+  <button class="icon-btn" onclick="goToAdmin()">☰</button>
+  <div class="header-center">我的工具</div>
+  <div style="width: 44px;"></div>
+</div>
 
-    function loadData() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error("載入失敗", e);
-          return {};
-        }
-      }
-      return {};
-    }
+<div class="sections-container">
+  <div class="sections" id="sectionsContainer"></div>
+</div>
 
-    function render() {
-      const data = loadData();
-      const app = document.getElementById("app");
-      app.innerHTML = "";
+<div class="content" id="contentArea"></div>
 
-      const sections = Object.entries(data);
-      if (sections.length === 0) {
-        app.innerHTML = '<div class="empty">暫無工具，請先到後台新增</div>';
-        return;
-      }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// 🔧 改這裡：填入你的 Supabase 資訊
+const SUPABASE_URL = "https://hfsfdhtpjuguehmdyryo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K2LJSqbEgwYro9hl2tua8w_u7Q2rR2i";
+const USE_SUPABASE = true;
 
-      sections.forEach(([id, sec]) => {
-        const sectionEl = document.createElement("div");
-        sectionEl.className = "section";
+const STORAGE_KEY = "my_toolbox_data";
+const supabase = USE_SUPABASE ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+const USER_ID = "user_" + (localStorage.getItem("user_id") || (localStorage.setItem("user_id", "user_" + Math.random().toString(36).substr(2, 9)), localStorage.getItem("user_id")));
 
-        const title = document.createElement("div");
-        title.className = "section-title";
-        title.innerHTML = `
-          <span>${sec.icon}</span>
-          <span>${sec.name}</span>
-          <span class="section-count">(${sec.links.length} 個)</span>
-        `;
-        sectionEl.appendChild(title);
+let sections = {};
+let currentSection = null;
 
-        const grid = document.createElement("div");
-        grid.className = "tool-grid";
-
-        sec.links.forEach(link => {
-          const card = document.createElement("a");
-          card.className = "tool-card";
-          card.href = link.url;
-          card.target = "_blank";
-          card.rel = "noopener noreferrer";
-          card.innerHTML = `
-            <div class="tool-icon">${link.icon}</div>
-            <div class="tool-name">${link.title}</div>
-            <div class="tool-desc">${link.desc}</div>
-          `;
-          grid.appendChild(card);
-        });
-
-        sectionEl.appendChild(grid);
-        app.appendChild(sectionEl);
+// ============ 資料同步 ============
+async function loadData() {
+  if (USE_SUPABASE && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("toolbox_sections")
+        .select("*")
+        .eq("user_id", USER_ID);
+      
+      if (error) throw error;
+      
+      sections = {};
+      data.forEach(row => {
+        sections[row.section_id] = {
+          name: row.name,
+          icon: row.icon,
+          links: row.links || []
+        };
       });
+    } catch (err) {
+      console.error("Supabase 讀取失敗", err);
+      loadLocalData();
+      return;
+    }
+  } else {
+    loadLocalData();
+  }
+  
+  if (Object.keys(sections).length === 0) {
+    sections.section_default = { name: "我的工具", icon: "📦", links: [] };
+    if (USE_SUPABASE && supabase) {
+      await supabase.from("toolbox_sections").insert({
+        user_id: USER_ID,
+        section_id: "section_default",
+        name: "我的工具",
+        icon: "📦",
+        links: []
+      });
+    } else {
+      saveLocalData();
+    }
+  }
+  currentSection = Object.keys(sections)[0];
+}
+
+function loadLocalData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      sections = JSON.parse(saved);
+    } catch (e) {
+      sections = {};
+    }
+  }
+}
+
+async function saveData() {
+  if (USE_SUPABASE && supabase) {
+    try {
+      for (const [secId, sec] of Object.entries(sections)) {
+        await supabase
+          .from("toolbox_sections")
+          .upsert({
+            user_id: USER_ID,
+            section_id: secId,
+            name: sec.name,
+            icon: sec.icon,
+            links: sec.links || []
+          });
+      }
+    } catch (err) {
+      console.error("Supabase 保存失敗", err);
+      saveLocalData();
+    }
+  } else {
+    saveLocalData();
+  }
+}
+
+function saveLocalData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sections));
+}
+
+// ============ 渲染 ============
+function renderSections() {
+  const el = document.getElementById("sectionsContainer");
+  el.innerHTML = "";
+  Object.keys(sections).forEach(id => {
+    const sec = sections[id];
+    const tab = document.createElement("div");
+    tab.className = "section-tab " + (id === currentSection ? "active" : "");
+    tab.textContent = sec.name;
+    tab.onclick = () => {
+      currentSection = id;
+      renderAll();
+    };
+    el.appendChild(tab);
+  });
+}
+
+function renderContent() {
+  const el = document.getElementById("contentArea");
+  el.innerHTML = "";
+
+  Object.keys(sections).forEach(id => {
+    if (id !== currentSection) return;
+    
+    const sec = sections[id];
+    if (sec.links.length === 0) {
+      el.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🔗</div>
+          <div>暫無工具</div>
+        </div>
+      `;
+      return;
     }
 
-    window.addEventListener("DOMContentLoaded", render);
-  </script>
+    const group = document.createElement("div");
+    group.className = "section-group";
+
+    const header = document.createElement("div");
+    header.className = "section-header";
+    header.innerHTML = `
+      <div class="section-icon">${sec.icon}</div>
+      <div class="section-name">${sec.name}</div>
+      <div class="section-count">${sec.links.length}</div>
+    `;
+    group.appendChild(header);
+
+    const grid = document.createElement("div");
+    grid.className = "tool-grid";
+
+    sec.links.forEach(link => {
+      const card = document.createElement("a");
+      card.className = "tool-card";
+      card.href = link.url;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+      card.innerHTML = `
+        <div class="tool-icon">${link.icon}</div>
+        <div class="tool-title">${link.title}</div>
+      `;
+      grid.appendChild(card);
+    });
+
+    group.appendChild(grid);
+    el.appendChild(group);
+  });
+}
+
+function renderAll() {
+  renderSections();
+  renderContent();
+}
+
+function goToAdmin() {
+  window.location.href = "admin.html";
+}
+
+// ============ 訂閱實時更新 ============
+async function setupRealtimeSync() {
+  if (!USE_SUPABASE || !supabase) return;
+  
+  supabase
+    .channel("toolbox_changes")
+    .on("postgres_changes", {
+      event: "*",
+      schema: "public",
+      table: "toolbox_sections",
+      filter: `user_id=eq.${USER_ID}`
+    }, (payload) => {
+      console.log("收到更新", payload);
+      loadData().then(() => renderAll());
+    })
+    .subscribe();
+}
+
+// ============ 初始化 ============
+window.addEventListener("DOMContentLoaded", async () => {
+  await loadData();
+  renderAll();
+  setupRealtimeSync();
+  
+  // 本地版本每 2 秒檢查一次
+  if (!USE_SUPABASE) {
+    setInterval(() => {
+      loadData();
+      renderAll();
+    }, 2000);
+  }
+});
+</script>
 </body>
 </html>

@@ -1,464 +1,451 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="我的工具">
-  <title>我的工具</title>
-  <style>
-    :root {
-      --color-bg-primary: #1a1a1a;
-      --color-bg-secondary: #242424;
-      --color-bg-tertiary: #2a2a2a;
-      --color-bg-card: #2f2f2f;
-      --color-border: #3a3a3a;
-      --color-text-primary: #ffffff;
-      --color-text-secondary: #b0b0b0;
-      --color-text-tertiary: #808080;
-      --color-active: #69F0AE;
-      --spacing-lg: 12px;
-      --spacing-md: 10px;
-      --spacing-sm: 6px;
-      --font-size-xs: 11px;
-      --font-size-sm: 13px;
-      --font-size-base: 15px;
-      --font-size-md: 17px;
-      --font-size-lg: 19px;
-      --radius-lg: 14px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虛擬商店 - 商城</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        body {
+            background: #1a1a1a;
+            color: #fff;
+            padding-bottom: 70px;
+            min-height: 100vh;
+        }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--color-bg-primary);
-      color: var(--color-text-secondary);
-      font-size: var(--font-size-base);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      min-height: 100dvh;
-    }
+        /* 導航欄 */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 999;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--spacing-lg);
-      background: var(--color-bg-secondary);
-      border-bottom: 1px solid var(--color-border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      flex-shrink: 0;
-    }
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .header-center {
-      color: var(--color-text-primary);
-      font-size: var(--font-size-lg);
-      font-weight: 600;
-      user-select: none;
-      flex: 1;
-      text-align: center;
-    }
+        .nav h1 {
+            font-size: 22px;
+            font-weight: 500;
+            color: #81c7ff;
+            line-height: 1.2;
+        }
 
-    .sections-container {
-      padding: 10px 12px;
-      background: var(--color-bg-secondary);
-      border-bottom: 1px solid var(--color-border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      flex-shrink: 0;
-    }
+        .nav-subtitle {
+            font-size: 12px;
+            color: #aaa;
+        }
 
-    .sections-container::-webkit-scrollbar {
-      display: none;
-    }
+        .nav button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 10px;
+            background: #5c9eff;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-    .sections {
-      display: flex;
-      gap: 6px;
-      min-width: min-content;
-    }
+        .nav button:hover {
+            background: #4a8de6;
+        }
 
-    .section-tab {
-      padding: 6px 12px;
-      background: var(--color-bg-tertiary);
-      border: 1px solid var(--color-border);
-      border-radius: 14px;
-      color: var(--color-text-secondary);
-      font-size: 13px;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.3s;
-      user-select: none;
-    }
+        /* 頁面容器 */
+        .page {
+            margin-top: 65px;
+            padding: 12px;
+            display: none;
+        }
 
-    .section-tab.active {
-      background: var(--color-bg-card);
-      border-color: var(--color-active);
-      color: var(--color-active);
-      font-weight: 600;
-    }
+        .page.active {
+            display: block;
+        }
 
-    .content {
-      flex: 1;
-      padding: var(--spacing-lg);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+        /* 分類選單 */
+        .filter-bar {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .section-group {
-      margin-bottom: 24px;
-    }
+        .filter-bar label {
+            font-size: 14px;
+            color: #ccc;
+        }
 
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      padding: 0 4px;
-    }
+        .filter-bar select {
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
 
-    .section-icon {
-      font-size: 20px;
-    }
+        .filter-bar select:focus {
+            border-color: #5c9eff;
+            background: rgba(255,255,255,0.08);
+        }
 
-    .section-name {
-      color: var(--color-text-primary);
-      font-size: var(--font-size-md);
-      font-weight: 600;
-    }
+        /* 商品列表 - 橫欄式 */
+        .goods-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
 
-    .section-count {
-      color: var(--color-text-tertiary);
-      font-size: var(--font-size-xs);
-      margin-left: auto;
-    }
+        .goods-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 12px;
+            background: linear-gradient(90deg, rgba(26,26,26,0.8) 0%, rgba(40,40,40,0.6) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
+        }
 
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 8px;
-    }
+        .goods-item:last-child {
+            border-bottom: none;
+        }
 
-    .tool-card {
-      background: var(--color-bg-secondary);
-      border-radius: 12px;
-      padding: 12px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid var(--color-border);
-      text-decoration: none;
-      color: inherit;
-      min-height: 100px;
-      justify-content: center;
-    }
+        .goods-item:hover {
+            background: linear-gradient(90deg, rgba(40,40,40,0.8) 0%, rgba(60,60,60,0.6) 100%);
+        }
 
-    .tool-card:active {
-      transform: scale(0.95);
-      background: var(--color-bg-tertiary);
-    }
+        .goods-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
 
-    .tool-icon {
-      font-size: 32px;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      background: var(--color-bg-tertiary);
-    }
+        .goods-info {
+            flex: 1;
+        }
 
-    .tool-title {
-      color: var(--color-text-primary);
-      font-size: 12px;
-      font-weight: 500;
-      text-align: center;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      word-break: break-word;
-    }
+        .goods-name {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #fff;
+        }
 
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--color-text-tertiary);
-    }
+        .goods-category {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
 
-    .empty-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
+        .goods-price {
+            color: #ff9500;
+            font-weight: bold;
+            font-size: 15px;
+        }
 
-    button {
-      font-family: inherit;
-      border: none;
-      cursor: pointer;
-    }
+        .buy-btn {
+            padding: 8px 16px;
+            background: #5c9eff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-    .icon-btn {
-      background: transparent;
-      color: var(--color-active);
-      font-size: var(--font-size-lg);
-      padding: 8px;
-      min-width: 44px;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .buy-btn:hover {
+            background: #4a8de6;
+        }
 
-    .icon-btn:active {
-      opacity: 0.7;
-    }
+        /* 底部欄 */
+        .tabbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
 
-    .loading {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--color-text-tertiary);
-    }
-  </style>
+        .tabbar button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .tabbar button.active {
+            color: #5c9eff;
+            font-weight: bold;
+        }
+
+        /* 訂單 */
+        .order-item {
+            background: rgba(255,255,255,0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .order-item div:first-child {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .order-item div:nth-child(2) {
+            color: #ff9500;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .order-item div:last-child {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* 客服按鈕 */
+        .service-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #5c9eff;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(92, 158, 255, 0.4);
+            transition: all 0.2s;
+        }
+
+        .service-btn:hover {
+            background: #4a8de6;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
 
-<div class="header">
-  <button class="icon-btn" onclick="goToAdmin()">☰</button>
-  <div class="header-center">我的工具</div>
-  <div style="width: 44px;"></div>
-</div>
-
-<div class="sections-container">
-  <div class="sections" id="sectionsContainer"></div>
-</div>
-
-<div class="content" id="contentArea"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// 🔧 改這裡：填入你的 Supabase 資訊
-const SUPABASE_URL = "https://hfsfdhtpjuguehmdyryo.supabase.co";
-const SUPABASE_KEY = "sb_publishable_K2LJSqbEgwYro9hl2tua8w_u7Q2rR2i";
-const USE_SUPABASE = true;
-
-const STORAGE_KEY = "my_toolbox_data";
-const supabase = USE_SUPABASE ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
-const USER_ID = "user_" + (localStorage.getItem("user_id") || (localStorage.setItem("user_id", "user_" + Math.random().toString(36).substr(2, 9)), localStorage.getItem("user_id")));
-
-let sections = {};
-let currentSection = null;
-
-// ============ 資料同步 ============
-async function loadData() {
-  if (USE_SUPABASE && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("toolbox_sections")
-        .select("*")
-        .eq("user_id", USER_ID);
-      
-      if (error) throw error;
-      
-      sections = {};
-      data.forEach(row => {
-        sections[row.section_id] = {
-          name: row.name,
-          icon: row.icon,
-          links: row.links || []
-        };
-      });
-    } catch (err) {
-      console.error("Supabase 讀取失敗", err);
-      loadLocalData();
-      return;
-    }
-  } else {
-    loadLocalData();
-  }
-  
-  if (Object.keys(sections).length === 0) {
-    sections.section_default = { name: "我的工具", icon: "📦", links: [] };
-    if (USE_SUPABASE && supabase) {
-      await supabase.from("toolbox_sections").insert({
-        user_id: USER_ID,
-        section_id: "section_default",
-        name: "我的工具",
-        icon: "📦",
-        links: []
-      });
-    } else {
-      saveLocalData();
-    }
-  }
-  currentSection = Object.keys(sections)[0];
-}
-
-function loadLocalData() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      sections = JSON.parse(saved);
-    } catch (e) {
-      sections = {};
-    }
-  }
-}
-
-async function saveData() {
-  if (USE_SUPABASE && supabase) {
-    try {
-      for (const [secId, sec] of Object.entries(sections)) {
-        await supabase
-          .from("toolbox_sections")
-          .upsert({
-            user_id: USER_ID,
-            section_id: secId,
-            name: sec.name,
-            icon: sec.icon,
-            links: sec.links || []
-          });
-      }
-    } catch (err) {
-      console.error("Supabase 保存失敗", err);
-      saveLocalData();
-    }
-  } else {
-    saveLocalData();
-  }
-}
-
-function saveLocalData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(sections));
-}
-
-// ============ 渲染 ============
-function renderSections() {
-  const el = document.getElementById("sectionsContainer");
-  el.innerHTML = "";
-  Object.keys(sections).forEach(id => {
-    const sec = sections[id];
-    const tab = document.createElement("div");
-    tab.className = "section-tab " + (id === currentSection ? "active" : "");
-    tab.textContent = sec.name;
-    tab.onclick = () => {
-      currentSection = id;
-      renderAll();
-    };
-    el.appendChild(tab);
-  });
-}
-
-function renderContent() {
-  const el = document.getElementById("contentArea");
-  el.innerHTML = "";
-
-  Object.keys(sections).forEach(id => {
-    if (id !== currentSection) return;
-    
-    const sec = sections[id];
-    if (sec.links.length === 0) {
-      el.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">🔗</div>
-          <div>暫無工具</div>
+    <div class="nav">
+        <div class="nav-left">
+            <h1>虛擬商店</h1>
+            <div class="nav-subtitle" id="welcomeText"></div>
         </div>
-      `;
-      return;
+        <button id="loginBtn">登入帳號</button>
+    </div>
+
+    <!-- 商城頁面 -->
+    <div id="shopPage" class="page active">
+        <div class="filter-bar">
+            <label for="categoryFilter">商品分類：</label>
+            <select id="categoryFilter">
+                <option value="全部">全部</option>
+            </select>
+        </div>
+        <div class="goods-list" id="goodsList"></div>
+    </div>
+
+    <!-- 訂單頁面 -->
+    <div id="orderPage" class="page">
+        <h2 style="margin:10px 0 16px; font-size:18px; color:#fff;">我的訂單</h2>
+        <div id="orderList"></div>
+    </div>
+
+    <div class="tabbar">
+        <button class="tab active" data-target="shopPage">商城</button>
+        <button class="tab" data-target="orderPage">訂單</button>
+    </div>
+
+    <button class="service-btn" id="serviceBtn">💬</button>
+
+<script>
+    // 使用者資訊（顯示歡迎詞用）
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const welcomeText = document.getElementById('welcomeText');
+    if (currentUser && currentUser.username) {
+        welcomeText.textContent = `歡迎，${currentUser.username}`;
+    } else {
+        welcomeText.textContent = '尚未登入';
     }
 
-    const group = document.createElement("div");
-    group.className = "section-group";
-
-    const header = document.createElement("div");
-    header.className = "section-header";
-    header.innerHTML = `
-      <div class="section-icon">${sec.icon}</div>
-      <div class="section-name">${sec.name}</div>
-      <div class="section-count">${sec.links.length}</div>
-    `;
-    group.appendChild(header);
-
-    const grid = document.createElement("div");
-    grid.className = "tool-grid";
-
-    sec.links.forEach(link => {
-      const card = document.createElement("a");
-      card.className = "tool-card";
-      card.href = link.url;
-      card.target = "_blank";
-      card.rel = "noopener noreferrer";
-      card.innerHTML = `
-        <div class="tool-icon">${link.icon}</div>
-        <div class="tool-title">${link.title}</div>
-      `;
-      grid.appendChild(card);
+    // 登入按鈕 -> 帳號頁
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        window.location.href = 'account.html';
     });
 
-    group.appendChild(grid);
-    el.appendChild(group);
-  });
-}
+    // 數據存儲
+    let goods = JSON.parse(localStorage.getItem('goods')) || [
+        { id: 1, name: '測試商品1', price: 99, color: '#5c9eff', icon: 'A', category: '一般' },
+        { id: 2, name: '測試商品2', price: 199, color: '#ff3b30', icon: '🎁', category: '禮物' }
+    ];
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
-function renderAll() {
-  renderSections();
-  renderContent();
-}
+    // 如果本地沒有 goods，初始化一次
+    if (!localStorage.getItem('goods')) {
+        localStorage.setItem('goods', JSON.stringify(goods));
+    }
 
-function goToAdmin() {
-  window.location.href = "admin.html";
-}
+    // 切換頁面
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const target = tab.dataset.target;
+            document.getElementById(target).classList.add('active');
+            tab.classList.add('active');
+        });
+    });
 
-// ============ 訂閱實時更新 ============
-async function setupRealtimeSync() {
-  if (!USE_SUPABASE || !supabase) return;
-  
-  supabase
-    .channel("toolbox_changes")
-    .on("postgres_changes", {
-      event: "*",
-      schema: "public",
-      table: "toolbox_sections",
-      filter: `user_id=eq.${USER_ID}`
-    }, (payload) => {
-      console.log("收到更新", payload);
-      loadData().then(() => renderAll());
-    })
-    .subscribe();
-}
+    // 客服按鈕
+    document.getElementById('serviceBtn').addEventListener('click', () => {
+        alert('客服功能：\n電話：0800-123-456\nLine：@virtualshop\nEmail：service@virtualshop.com');
+    });
 
-// ============ 初始化 ============
-window.addEventListener("DOMContentLoaded", async () => {
-  await loadData();
-  renderAll();
-  setupRealtimeSync();
-  
-  // 本地版本每 2 秒檢查一次
-  if (!USE_SUPABASE) {
-    setInterval(() => {
-      loadData();
-      renderAll();
-    }, 2000);
-  }
-});
+    // 渲染分類選單
+    function renderCategoryFilter() {
+        const select = document.getElementById('categoryFilter');
+        const currentValue = select.value || '全部';
+        const categories = new Set();
+        goods.forEach(item => {
+            if (item.category) {
+                categories.add(item.category);
+            }
+        });
+
+        select.innerHTML = '<option value="全部">全部</option>';
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            select.appendChild(option);
+        });
+
+        // 恢復原本選擇（如果還存在）
+        const hasOption = Array.from(select.options).some(o => o.value === currentValue);
+        if (hasOption) {
+            select.value = currentValue;
+        } else {
+            select.value = '全部';
+        }
+    }
+
+    // 渲染商城商品
+    function renderShop() {
+        const list = document.getElementById('goodsList');
+        list.innerHTML = '';
+        const categoryFilter = document.getElementById('categoryFilter').value || '全部';
+
+        const filteredGoods = categoryFilter === '全部'
+            ? goods
+            : goods.filter(item => item.category === categoryFilter);
+
+        if (filteredGoods.length === 0) {
+            list.innerHTML = '<div style="padding:16px; font-size:14px; color:#ccc;">此分類下暫無商品</div>';
+            return;
+        }
+
+        filteredGoods.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'goods-item';
+            div.innerHTML = `
+                <div class="goods-icon" style="background: ${item.color};">
+                    ${item.icon || '📦'}
+                </div>
+                <div class="goods-info">
+                    <div class="goods-name">${item.name}</div>
+                    <div class="goods-category">${item.category ? '分類：' + item.category : '分類：未分類'}</div>
+                    <div class="goods-price">NT$${item.price}</div>
+                </div>
+                <button class="buy-btn" data-id="${item.id}">立即購買</button>
+            `;
+            list.appendChild(div);
+        });
+
+        // 購買事件
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = Number(btn.dataset.id);
+                const good = goods.find(g => g.id === id);
+                if (!good) return;
+                orders.push({
+                    orderId: Date.now(),
+                    goodsName: good.name,
+                    price: good.price,
+                    time: new Date().toLocaleString('zh-TW')
+                });
+                localStorage.setItem('orders', JSON.stringify(orders));
+                alert('購買成功！');
+                renderOrders();
+            });
+        });
+    }
+
+    // 渲染訂單
+    function renderOrders() {
+        const list = document.getElementById('orderList');
+        list.innerHTML = '';
+        if (orders.length === 0) {
+            list.innerHTML = '<div style="padding:16px; font-size:14px; color:#ccc;">目前沒有訂單</div>';
+            return;
+        }
+        orders.forEach(o => {
+            const div = document.createElement('div');
+            div.className = 'order-item';
+            div.innerHTML = `
+                <div>商品：${o.goodsName}</div>
+                <div>價格：NT$${o.price}</div>
+                <div>訂單時間：${o.time}</div>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    // 分類選單變更時重新渲染
+    document.getElementById('categoryFilter').addEventListener('change', () => {
+        renderShop();
+    });
+
+    // 初始化
+    renderCategoryFilter();
+    renderShop();
+    renderOrders();
 </script>
 </body>
 </html>

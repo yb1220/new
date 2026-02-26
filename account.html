@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虛擬商店 - 帳號登入註冊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        /* 導航欄 */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 999;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav h1 {
+            font-size: 22px;
+            font-weight: 500;
+            color: #81c7ff;
+            line-height: 1.2;
+        }
+
+        .nav-subtitle {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .nav button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 10px;
+            background: #5c9eff;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav button:hover {
+            background: #4a8de6;
+        }
+
+        .container {
+            padding: 70px 16px 20px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 14px;
+            background: rgba(255,255,255,0.03);
+            color: #aaa;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #5c9eff;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #ccc;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .form-group input:focus {
+            border-color: #5c9eff;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 14px;
+            background: #34c759;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-top: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .primary-btn:hover {
+            background: #2db84f;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        .link-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .link-row a {
+            color: #5c9eff;
+            text-decoration: none;
+        }
+
+        .link-row a:hover {
+            text-decoration: underline;
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: #ccc;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <div class="nav-left">
+            <h1>虛擬商店</h1>
+            <div class="nav-subtitle" id="navUserText">帳號登入 / 註冊</div>
+        </div>
+        <button id="backShopBtn">返回商城</button>
+    </div>
+
+    <div class="container">
+        <div class="status-text" id="currentStatus"></div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-target="loginForm">登入</button>
+            <button class="tab-btn" data-target="registerForm">註冊</button>
+        </div>
+
+        <!-- 登入表單 -->
+        <div id="loginForm" class="form-view">
+            <div class="form-group">
+                <label>電子郵件</label>
+                <input type="email" id="loginEmail" placeholder="請輸入註冊時的電子郵件">
+            </div>
+            <div class="form-group">
+                <label>密碼</label>
+                <input type="password" id="loginPassword" placeholder="請輸入密碼">
+            </div>
+            <button class="primary-btn" id="loginBtn">登入</button>
+            <div class="hint">登入成功後，可從此頁前往商城或後台管理。</div>
+        </div>
+
+        <!-- 註冊表單 -->
+        <div id="registerForm" class="form-view" style="display:none;">
+            <div class="form-group">
+                <label>暱稱 / 使用者名稱</label>
+                <input type="text" id="regUsername" placeholder="顯示在系統中的名稱">
+            </div>
+            <div class="form-group">
+                <label>電子郵件</label>
+                <input type="email" id="regEmail" placeholder="作為登入帳號使用">
+            </div>
+            <div class="form-group">
+                <label>密碼</label>
+                <input type="password" id="regPassword" placeholder="請設定密碼">
+            </div>
+            <button class="primary-btn" id="registerBtn">註冊</button>
+            <div class="hint">帳號資訊僅儲存在此裝置的 localStorage，無伺服器端。</div>
+        </div>
+
+        <div class="link-row">
+            <a href="index.html">前往商城</a>
+            <a href="admin.html">前往後台（需已登入）</a>
+        </div>
+    </div>
+
+<script>
+    // 返回商城
+    document.getElementById('backShopBtn').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+
+    // Tab 切換
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const target = btn.dataset.target;
+            document.querySelectorAll('.form-view').forEach(view => {
+                view.style.display = (view.id === target) ? 'block' : 'none';
+            });
+        });
+    });
+
+    // 顯示當前登入狀態
+    function refreshStatus() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const statusEl = document.getElementById('currentStatus');
+        const navUserText = document.getElementById('navUserText');
+        if (currentUser && (currentUser.username || currentUser.email)) {
+            const name = currentUser.username || currentUser.email;
+            statusEl.textContent = `目前登入中：${name}`;
+            navUserText.textContent = `已登入：${name}`;
+        } else {
+            statusEl.textContent = '目前尚未登入';
+            navUserText.textContent = '帳號登入 / 註冊';
+        }
+    }
+
+    refreshStatus();
+
+    // 註冊
+    document.getElementById('registerBtn').addEventListener('click', () => {
+        const username = document.getElementById('regUsername').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value.trim();
+
+        if (!email || !password) {
+            alert('請至少填寫電子郵件與密碼');
+            return;
+        }
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const exists = users.find(u => u.email === email);
+        if (exists) {
+            alert('此電子郵件已註冊，請直接登入');
+            return;
+        }
+
+        const newUser = {
+            id: Date.now(),
+            username: username || email,
+            email,
+            password
+        };
+
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
+
+        alert('註冊並登入成功');
+        refreshStatus();
+    });
+
+    // 登入
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+
+        if (!email || !password) {
+            alert('請輸入電子郵件與密碼');
+            return;
+        }
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+        if (!user) {
+            alert('帳號或密碼錯誤');
+            return;
+        }
+
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        alert('登入成功');
+        refreshStatus();
+    });
+</script>
+</body>
+</html>
